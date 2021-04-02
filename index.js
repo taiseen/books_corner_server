@@ -105,7 +105,7 @@ client.connect(err => {
 
     // Create || POST operation  ==> for Order
     //#################################################################
-    app.post('/order', (req, res) => {
+    app.post('/bookOrder', (req, res) => {
         const orderBook = req.body;
 
         orderCollection.insertOne(orderBook)
@@ -119,13 +119,16 @@ client.connect(err => {
 
     // Read || GET operation ==> for Order
     //#################################################################
-    app.get('/orders', (req, res) => {
+    app.get('/allOrders', (req, res) => {
 
-        // orderCollection.find({})
-        //     .toArray((err, books) => {
-        //         res.send(books);
-        //         console.log(books);
-        //     });
+        // const bearer = req.headers.authorization;
+        const userEmail = req.query.email;
+        
+        orderCollection.find({ email: userEmail })
+            .toArray((err, order) => {
+                res.send(order);
+                console.log(order);
+            });
 
 
         //     const bearer = req.headers.authorization;
