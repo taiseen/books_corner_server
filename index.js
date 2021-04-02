@@ -5,6 +5,10 @@
 // npm install firebase-admin --save
 // total 7 items 
 
+// "start": "node index.js",
+// "start:dev": "nodemon index.js",
+
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -20,6 +24,8 @@ const port = process.env.PORT || 5000;
 app.listen(port, () => {
     console.log(`Server is Running on port ==> ${port}`);
 });
+
+app.set('title', 'Books-Corner ==> Server');
 
 app.get('/', (req, res) => {
     res.send(`<h1>Development-Books-Corner's Server Is Running!...</h1>`);
@@ -81,10 +87,11 @@ client.connect(err => {
         const bookId = req.params.id;
         console.log(bookId);
 
+        //res.send(true);
         booksCollection.deleteOne({ _id: ObjectID(bookId) })
             .then(result => {
-                res.send(result.insertedCount);
-                console.log(result.insertedCount);
+                res.send(result.deletedCount>0);
+                console.log(result.deletedCount);
             });
     });
 
