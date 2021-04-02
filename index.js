@@ -51,10 +51,9 @@ client.connect(err => {
     const booksCollection = client.db(`${process.env.DB_NAME}`).collection(`${process.env.DB_BOOKS}`);
     const orderCollection = client.db(`${process.env.DB_NAME}`).collection(`${process.env.DB_ORDER}`);
 
-    //#################################################################
-    //#################################################################
-    // Read || GET operation ==> for Books
 
+    // Read || GET operation ==> for Books
+    //#################################################################
     app.get('/allBooks', (req, res) => {
         booksCollection.find({})
             .toArray((err, books) => {
@@ -64,10 +63,10 @@ client.connect(err => {
             });
     });
 
-    //#################################################################
-    //#################################################################
-    // Create || POST operation  ==> for Book
 
+
+    // Create || POST operation  ==> for Book
+    //#################################################################
     app.post('/addBook', (req, res) => {
         const book = req.body;
         console.log(book);
@@ -79,10 +78,10 @@ client.connect(err => {
             })
     })
 
-    //#################################################################
-    //#################################################################
-    // Delete || Delete operation  ==> for Books
 
+
+    // Delete || Delete operation  ==> for Books
+    //#################################################################
     app.delete('/deleteBook/:id', (req, res) => {
         const bookId = req.params.id;
         console.log(bookId);
@@ -90,22 +89,81 @@ client.connect(err => {
         //res.send(true);
         booksCollection.deleteOne({ _id: ObjectID(bookId) })
             .then(result => {
-                res.send(result.deletedCount>0);
+                res.send(result.deletedCount > 0);
                 console.log(result.deletedCount);
             });
     });
 
-    //#################################################################
-    //#################################################################
-    // Read || GET operation ==> for Order
 
+
+
+    // Order Collection Start    
+    //#################################################################
+    //#################################################################
+    //#################################################################
+
+
+    // Create || POST operation  ==> for Order
+    //#################################################################
+    app.post('/order', (req, res) => {
+        const orderBook = req.body;
+
+        orderCollection.insertOne(orderBook)
+            .then(result => {
+                res.send(result.insertedCount > 0);
+                console.log(result.insertedCount > 0);
+            });
+        console.log({ orderBook });
+    });
+
+
+    // Read || GET operation ==> for Order
+    //#################################################################
     app.get('/orders', (req, res) => {
 
-        booksCollection.find({})
-            .toArray((err, books) => {
-                res.send(books);
-                console.log(books);
-            });
+        // orderCollection.find({})
+        //     .toArray((err, books) => {
+        //         res.send(books);
+        //         console.log(books);
+        //     });
+
+
+        //     const bearer = req.headers.authorization;
+        //     const userEmail = req.query.email;
+
+        //     if (bearer && bearer.startsWith('Bearer ')) {
+        //       const idToken = bearer.split(' ')[1];
+        //       console.log({ idToken });
+
+        //       // idToken comes from the client app
+        //       admin
+        //         .auth()
+        //         .verifyIdToken(idToken)
+        //         .then((decodedToken) => {
+        //           //const uid = decodedToken.uid;
+
+        //           const tokenEmail = decodedToken.email;
+
+        //           console.log({ tokenEmail });
+        //           console.log({ userEmail });
+        //           //====================================
+        //           if (tokenEmail === userEmail) {
+        //             orderCollection.find({ email: userEmail })
+        //               .toArray((err, documents) => {
+        //                 res.status(200).send(documents)
+        //                 //console.log({ email });
+        //               })
+        //           } else {
+        //             res.status(401).send('un-authorize access : Email Not Match')
+        //           }
+        //         })
+        //         .catch((error) => {
+        //           res.status(401).send('un-authorize access : ' + error)
+        //         });
+        //     } else {
+        //       res.status(401).send('un-authorize access for : ' + userEmail)
+        //     }
+
     });
 
 
