@@ -116,7 +116,7 @@ client.connect(err => {
         console.log({ orderBook });
     });
 
-
+    
     // Read || GET operation ==> for Order
     //#################################################################
     app.get('/allOrders', (req, res) => {
@@ -167,6 +167,20 @@ client.connect(err => {
         //       res.status(401).send('un-authorize access for : ' + userEmail)
         //     }
 
+    });
+
+        // Delete || Delete operation  ==> for Books
+    //#################################################################
+    app.delete('/deleteOrder/:id', (req, res) => {
+        const orderId = req.params.id;
+        console.log(orderId);
+
+        orderCollection.deleteOne({ _id: ObjectID(orderId) })
+            .then(result => {
+                res.send(result.deletedCount > 0);
+                console.log(result.deletedCount);
+            }); 
+            
     });
 
 
