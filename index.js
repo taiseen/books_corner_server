@@ -96,6 +96,20 @@ client.connect(err => {
 
 
 
+    // Search || GET operation  ==> for Book Search
+    //#################################################################
+    app.get('/searchingBook', (req, res) => {
+        //booksCollection.find({})//.limit(20)
+        const search = req.query.searchBook;
+        console.log(search);
+
+        booksCollection.find({ bookName: { $regex: search } })
+            .toArray((err, book) => {
+                res.send(book);
+            })
+    });
+
+
 
     // Order Collection Start    
     //#################################################################
